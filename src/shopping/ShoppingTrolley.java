@@ -5,7 +5,7 @@
  */
 package shopping;
 
-import java.util.ArrayList;
+import java.util.ArrayList;  //Cloning test
 
 /**
  * A simple ShoppingTrolley
