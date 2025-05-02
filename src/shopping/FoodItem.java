@@ -15,7 +15,7 @@ public class FoodItem extends StoreItem {
     public String getExpiryDate() {
         return expiryDate;
     }
-
+ 
     @Override
     public String toString() {
         return super.toString() + " (Validade: " + expiryDate + ")";
