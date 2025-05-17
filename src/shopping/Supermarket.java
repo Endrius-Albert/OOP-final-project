@@ -4,6 +4,9 @@
  */
 package shopping;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /**
  *
  * @author kheal
@@ -15,52 +18,180 @@ public class Supermarket {
      */
     public static void main(String[] args) {
         
-          
-        ShoppingTrolley myBag = new ShoppingTrolley(); //this is myBag. I can buy things to put in it
+        ShoppingTrolley myBag = new ShoppingTrolley(); //this is myBag. I can buy things to put in it 
+        Scanner mykb = new Scanner(System.in); 
         
         //create a food itens object 
         FoodItem milk = new FoodItem("Milk", 2.50, "10/06/2025");
         FoodItem bread = new FoodItem("Bread", 1.80, "09/06/2025");
         FoodItem cheese = new FoodItem("Cheddar Cheese", 3.75, "15/06/2025");
 
-        //add the new food itens to the shopping trolley
-        myBag.buyItem(bread);
-        myBag.buyItem(cheese);
-        myBag.buyItem(milk);
-        
         //create clothing itens objects
         ClothingItem tshirt = new ClothingItem("T-shirt", 15.00, "M", "Cotton");
         ClothingItem jeans = new ClothingItem("Jeans", 45.00, "L", "Denim");
         ClothingItem jacket = new ClothingItem("Jacket", 80.00, "XL", "Leather");
-
-        //add the clothing items to the shopping trolley
-        myBag.buyItem(tshirt);
-        myBag.buyItem(jeans);
-        myBag.buyItem(jacket);
 
         //create drink itens objects
         DrinkItem wine = new DrinkItem("Red Wine", 12.00, "750ml", true);
         DrinkItem juice = new DrinkItem("Orange Juice", 3.00, "1L", false);
         DrinkItem beer = new DrinkItem("Craft Beer", 5.50, "500ml", true);
         DrinkItem water = new DrinkItem("Water", 2.00, "2L", false);
+        
+        //create generic store items 
+        StoreItem toaster = new StoreItem("Toaster", 25.00); //electrical appliance
+        StoreItem headphones = new StoreItem("Headphones", 75.00); //electronics
+        StoreItem vacuumCleaner = new StoreItem("Vacuum Cleaner", 120.00); //home utility
 
-        //add the drink items to the shopping trolley using addToTrolley() method to check the age
-        wine.addToTrolley(myBag);
-        juice.addToTrolley(myBag);
-        beer.addToTrolley(myBag);
-        water.addToTrolley(myBag);
-        
-        //print the trolley contents
+        /*create a simple menu to let the user choose which category of items to buy */
+        int option = 0;
+        do {
+            System.out.println("Welcome to the Supermarket!");
+            System.out.println("Choose a category to buy from:");
+            System.out.println("1. Food");
+            System.out.println("2. Clothing");
+            System.out.println("3. Drinks");
+            System.out.println("4. Store Items");
+            System.out.println("5. Finish shopping and view trolley");
+
+            try {
+                option = mykb.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                mykb.nextLine(); //clear invalid input
+                option = 0; //force repeat
+                continue;
+            }
+/*We pass 'mykb' and 'myBag'as parameters to these methods 
+because they were created in the main method and we want to keep using the same instances. 
+This way, all items added in different methods go to the same trolley, and we use a single 
+Scanner for user input throughout the program. 
+If we created new objects inside each method, they would be different from the ones in 'main' 
+ and we would lose the items or have multiple Scanners causing input issues.*/
+
+            switch(option) {
+                case 1:
+                    buyFoodItem(mykb, myBag, milk, bread, cheese);
+                    break;
+                case 2:
+                    buyClothingItem(mykb, myBag, tshirt, jeans, jacket);
+                    break;
+                case 3:
+                    buyDrinkItem(mykb, myBag, wine, juice, beer, water);
+                    break;
+                case 4:
+                    buyStoreItem(mykb, myBag, toaster, headphones, vacuumCleaner);
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        } while(option != 5);
+
         displayItemsInTrolley(myBag); //this is a modularised method to print and empty the trolley
-        
-        /*
-          YOU MUST COMPLETE THIS CODE - REMEMBER TO COMMENT WHAT YOU HAVE DONE AND TRY TO MODULARISE YOUR CODE (i.e. create your own methods)
-        */
     }
 
-    /*Displays all items in the shopping trolley and empties it afterwards.*/
+    /*displays all items in the shopping trolley and empties it afterwards.*/
     public static void displayItemsInTrolley(ShoppingTrolley trolley) {
         System.out.println("Items in your trolley:");
         System.out.println(trolley.emptyTrolley());
+    }
+
+    /*method to display food items and let the user choose which one to buy*/
+    public static void buyFoodItem(Scanner mykb, ShoppingTrolley myBag, FoodItem milk, FoodItem bread, FoodItem cheese) {
+        System.out.println("Choose a food item to buy:");
+        System.out.println("1. " + milk);
+        System.out.println("2. " + bread);
+        System.out.println("3. " + cheese);
+        System.out.println("4. Cancel");
+        int choice = 0;
+        try {
+            choice = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Returning to main menu.");
+            mykb.nextLine();
+            return;
+        }
+        switch(choice) {
+            case 1: myBag.buyItem(milk); break;
+            case 2: myBag.buyItem(bread); break;
+            case 3: myBag.buyItem(cheese); break;
+            case 4: break;
+            default: System.out.println("Invalid choice.");
+        }
+    }
+
+    /*method to display clothing items and let the user choose which one to buy*/
+    public static void buyClothingItem(Scanner mykb, ShoppingTrolley myBag, ClothingItem tshirt, ClothingItem jeans, ClothingItem jacket) {
+        System.out.println("Choose a clothing item to buy:");
+        System.out.println("1. " + tshirt);
+        System.out.println("2. " + jeans);
+        System.out.println("3. " + jacket);
+        System.out.println("4. Cancel");
+        int choice = 0;
+        try {
+            choice = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Returning to main menu.");
+            mykb.nextLine();
+            return;
+        }
+        switch(choice) {
+            case 1: myBag.buyItem(tshirt); break;
+            case 2: myBag.buyItem(jeans); break;
+            case 3: myBag.buyItem(jacket); break;
+            case 4: break;
+            default: System.out.println("Invalid choice.");
+        }
+    }
+
+    /*method to display drink items and let the user choose which one to buy, using addToTrolley to check age if needed*/
+    public static void buyDrinkItem(Scanner mykb, ShoppingTrolley myBag, DrinkItem wine, DrinkItem juice, DrinkItem beer, DrinkItem water) {
+        System.out.println("Choose a drink item to buy:");
+        System.out.println("1. " + wine);
+        System.out.println("2. " + juice);
+        System.out.println("3. " + beer);
+        System.out.println("4. " + water);
+        System.out.println("5. Cancel");
+        int choice = 0;
+        try {
+            choice = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Returning to main menu.");
+            mykb.nextLine();
+            return;
+        }
+        switch(choice) {
+            case 1: wine.addToTrolley(myBag); break;
+            case 2: juice.addToTrolley(myBag); break;
+            case 3: beer.addToTrolley(myBag); break;
+            case 4: water.addToTrolley(myBag); break;
+            case 5: break;
+            default: System.out.println("Invalid choice.");
+        }
+    }
+
+    /*method to display generic store items and let the user choose which one to buy*/
+    public static void buyStoreItem(Scanner mykb, ShoppingTrolley myBag, StoreItem toaster, StoreItem headphones, StoreItem vacuumCleaner) {
+        System.out.println("Choose a store item to buy:");
+        System.out.println("1. " + toaster);
+        System.out.println("2. " + headphones);
+        System.out.println("3. " + vacuumCleaner);
+        System.out.println("4. Cancel");
+        int choice = 0;
+        try {
+            choice = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Returning to main menu.");
+            mykb.nextLine();
+            return;
+        }
+        switch(choice) {
+            case 1: myBag.buyItem(toaster); break;
+            case 2: myBag.buyItem(headphones); break;
+            case 3: myBag.buyItem(vacuumCleaner); break;
+            case 4: break;
+            default: System.out.println("Invalid choice.");
+        }
     }
 }
