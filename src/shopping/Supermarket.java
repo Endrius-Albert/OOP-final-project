@@ -51,7 +51,7 @@ public class Supermarket {
             System.out.println("2. Clothing");
             System.out.println("3. Drinks");
             System.out.println("4. Store Items");
-            System.out.println("5. Finish shopping and view trolley");
+            System.out.println("5. Finish shopping");
 
             try {
                 option = mykb.nextInt();
@@ -61,7 +61,7 @@ public class Supermarket {
                 option = 0; //force repeat
                 continue;
             }
-/*We pass 'mykb' and 'myBag'as parameters to these methods 
+/*We pass "mykb" and "myBag" as parameters to these methods 
 because they were created in the main method and we want to keep using the same instances. 
 This way, all items added in different methods go to the same trolley, and we use a single 
 Scanner for user input throughout the program. 
@@ -113,9 +113,9 @@ If we created new objects inside each method, they would be different from the o
             return;
         }
         switch(choice) {
-            case 1: myBag.buyItem(milk); break;
-            case 2: myBag.buyItem(bread); break;
-            case 3: myBag.buyItem(cheese); break;
+            case 1: howMany(mykb, myBag, milk); break;
+             case 2: howMany(mykb, myBag, bread); break;
+             case 3: howMany(mykb, myBag, cheese); break;
             case 4: break;
             default: System.out.println("Invalid choice.");
         }
@@ -137,10 +137,10 @@ If we created new objects inside each method, they would be different from the o
             return;
         }
         switch(choice) {
-            case 1: myBag.buyItem(tshirt); break;
-            case 2: myBag.buyItem(jeans); break;
-            case 3: myBag.buyItem(jacket); break;
-            case 4: break;
+           case 1: howMany(mykb, myBag, tshirt); break;
+           case 2: howMany(mykb, myBag, jeans); break;
+            case 3: howMany(mykb, myBag, jacket); break;
+           case 4: break;
             default: System.out.println("Invalid choice.");
         }
     }
@@ -164,7 +164,7 @@ If we created new objects inside each method, they would be different from the o
         switch(choice) {
             case 1: wine.addToTrolley(myBag); break;
             case 2: juice.addToTrolley(myBag); break;
-            case 3: beer.addToTrolley(myBag); break;
+           case 3: beer.addToTrolley(myBag); break;
             case 4: water.addToTrolley(myBag); break;
             case 5: break;
             default: System.out.println("Invalid choice.");
@@ -187,11 +187,27 @@ If we created new objects inside each method, they would be different from the o
             return;
         }
         switch(choice) {
-            case 1: myBag.buyItem(toaster); break;
-            case 2: myBag.buyItem(headphones); break;
-            case 3: myBag.buyItem(vacuumCleaner); break;
+           case 1: howMany(mykb, myBag, toaster); break;
+            case 2: howMany(mykb, myBag, headphones); break;
+           case 3: howMany(mykb, myBag, vacuumCleaner); break;
             case 4: break;
             default: System.out.println("Invalid choice.");
+        }
+    }
+
+    /*method to ask how many units to add of a selected item*/
+    public static void howMany(Scanner mykb, ShoppingTrolley myBag, StoreItem item) {
+        System.out.print("How many do you want to buy? ");
+        int quantity = 0;
+        try {
+            quantity = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Returning to main menu.");
+            mykb.nextLine();
+            return;
+        }
+        for (int i = 0; i < quantity; i++) {
+            myBag.buyItem(item);
         }
     }
 }
