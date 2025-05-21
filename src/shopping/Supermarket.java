@@ -4,6 +4,7 @@
  */
 package shopping;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ public class Supermarket {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        ArrayList<StoreItem> itemsInTrolley = new ArrayList<>();
         ShoppingTrolley myBag = new ShoppingTrolley(); 
         Scanner mykb = new Scanner(System.in); 
         double[] total = {0.0}; 
@@ -49,8 +50,8 @@ public class Supermarket {
             System.out.println("Welcome to the Supermarket!");
             System.out.println("Choose a category to buy from:");
             System.out.println("1. Food");
-            System.out.println("2. Clothing");
-            System.out.println("3. Drinks");
+            System.out.println("2. Drinks");
+            System.out.println("3. Clothing");
             System.out.println("4. Store Items");
             System.out.println("5. View trolley");
             System.out.println("6. Finish shopping");
@@ -58,7 +59,7 @@ public class Supermarket {
             try {
                 option = mykb.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("Invalid. Please enter a number.");
                 mykb.nextLine(); //clear invalid input
                 option = 0; //force repeat
                 continue;
@@ -71,12 +72,23 @@ If we created new objects inside each method, they would be different from the o
  and we would lose the items or have multiple Scanners causing input issues.*/
 
    switch(option) {
-     case 1:buyFoodItem(mykb, myBag, total, milk, bread, cheese);break;
-     case 2:buyClothingItem(mykb, myBag, total, tshirt, jeans, jacket); break;
-     case 3:buyDrinkItem(mykb, myBag, total, wine, juice, beer, water);break;
-     case 4:buyStoreItem(mykb, myBag, total, toaster, headphones, vacuumCleaner);break;
-     case 5:viewTrolley(myBag, total);break;
-     case 6: break;
+     case 1:buyFoodItem(mykb, myBag, total, milk, bread, cheese, itemsInTrolley);break;
+     case 2:buyDrinkItem(mykb, myBag, total, wine, juice, beer, water, itemsInTrolley);break;
+     case 3:buyClothingItem(mykb, myBag, total, tshirt, jeans, jacket, itemsInTrolley); break;
+     case 4:buyStoreItem(mykb, myBag, total, toaster, headphones, vacuumCleaner, itemsInTrolley);break;
+     case 5:
+    total[0] = 0;
+    for (StoreItem item : itemsInTrolley) {
+        total[0] += item.getPrice();
+    }
+    trolleyMenu(mykb, myBag, total, itemsInTrolley);
+    break;
+     case 6:
+    System.out.printf("Total: €%.2f\n", total[0]);
+        System.out.println(" ");
+    displayItemsInTrolley(myBag); 
+    break;
+
      default:System.out.println("Invalid option. Please try again.");}
      } while(option != 6);
         displayItemsInTrolley(myBag); 
@@ -84,12 +96,13 @@ If we created new objects inside each method, they would be different from the o
 
     /*displays all items in the shopping trolley and empties it afterwards.*/
     public static void displayItemsInTrolley(ShoppingTrolley trolley) {
-        System.out.println("Items in your trolley:");
-        System.out.println(trolley.emptyTrolley());
+    System.out.println("Items in your trolley:");
+    String list = trolley.emptyTrolley();
+    System.out.println(list);
     }
 
     /*method to display food items and let the user choose which one to buy*/
-    public static void buyFoodItem(Scanner mykb, ShoppingTrolley myBag, double[] total, FoodItem milk, FoodItem bread, FoodItem cheese) {
+    public static void buyFoodItem(Scanner mykb, ShoppingTrolley myBag, double[] total, FoodItem milk, FoodItem bread, FoodItem cheese, ArrayList<StoreItem> itemsInTrolley) {
         System.out.println("Choose a food item to buy:");
         System.out.println("1. " + milk);
         System.out.println("2. " + bread);
@@ -99,21 +112,21 @@ If we created new objects inside each method, they would be different from the o
         try {
             choice = mykb.nextInt();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Returning to main menu.");
+            System.out.println("Invalid. Returning to main menu.");
             mykb.nextLine();
             return;
         }
         switch(choice) {
-            case 1: howMany(mykb, myBag, milk, total,0); break;
-            case 2: howMany(mykb, myBag, bread, total,0); break;
-            case 3: howMany(mykb, myBag, cheese, total,0); break;
+            case 1: howMany(mykb, myBag, milk, total, itemsInTrolley); break;
+            case 2: howMany(mykb, myBag, bread, total, itemsInTrolley); break;
+            case 3: howMany(mykb, myBag, cheese, total, itemsInTrolley); break;
             case 4: break;
             default: System.out.println("Invalid choice.");
         }
     }
 
     /*method to display clothing items and let the user choose which one to buy*/
-    public static void buyClothingItem(Scanner mykb, ShoppingTrolley myBag, double[] total, ClothingItem tshirt, ClothingItem jeans, ClothingItem jacket) {
+    public static void buyClothingItem(Scanner mykb, ShoppingTrolley myBag, double[] total, ClothingItem tshirt, ClothingItem jeans, ClothingItem jacket, ArrayList<StoreItem> itemsInTrolley) {
         System.out.println("Choose a clothing item to buy:");
         System.out.println("1. " + tshirt);
         System.out.println("2. " + jeans);
@@ -123,21 +136,21 @@ If we created new objects inside each method, they would be different from the o
         try {
             choice = mykb.nextInt();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Returning to main menu.");
+            System.out.println("Invalid. Returning to main menu.");
             mykb.nextLine();
             return;
         }
         switch(choice) {
-            case 1: howMany(mykb, myBag, tshirt, total,0); break;
-            case 2: howMany(mykb, myBag, jeans, total,0); break;
-            case 3: howMany(mykb, myBag, jacket, total,0); break;
+            case 1: howMany(mykb, myBag, tshirt, total, itemsInTrolley); break;
+            case 2: howMany(mykb, myBag, jeans, total, itemsInTrolley); break;
+            case 3: howMany(mykb, myBag, jacket, total, itemsInTrolley); break;
             case 4: break;
             default: System.out.println("Invalid choice.");
         }
     }
 
     /*method to display drink items and let the user choose which one to buy, using addToTrolley to check age if needed*/
-    public static void buyDrinkItem(Scanner mykb, ShoppingTrolley myBag, double[] total, DrinkItem wine, DrinkItem juice, DrinkItem beer, DrinkItem water) {
+    public static void buyDrinkItem(Scanner mykb, ShoppingTrolley myBag, double[] total, DrinkItem wine, DrinkItem juice, DrinkItem beer, DrinkItem water, ArrayList<StoreItem> itemsInTrolley) {
         System.out.println("Choose a drink item to buy:");
         System.out.println("1. " + wine);
         System.out.println("2. " + juice);
@@ -148,25 +161,25 @@ If we created new objects inside each method, they would be different from the o
         try {
             choice = mykb.nextInt();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Returning to main menu.");
+            System.out.println("Invalid. Returning to main menu.");
             mykb.nextLine();
             return;
         }
        switch(choice) {
  /* The if checks if the age was okay and the first item was added.
  If yes, then we ask how many more the user wants to add*/   
-    case 1: if (wine.addToTrolley(myBag)){ howMany(mykb, myBag, wine, total,1);} break;
-    case 2: if (juice.addToTrolley(myBag)) {howMany(mykb, myBag, juice, total,1);}break;
-    case 3: if (beer.addToTrolley(myBag)) {howMany(mykb, myBag, beer, total,1);}break;
-    case 4:if (water.addToTrolley(myBag)) {howMany(mykb, myBag, water, total,1);}break;
-    case 5: break;
+        case 1: if (wine.addToTrolley()) { howMany(mykb, myBag, wine, total, itemsInTrolley); } break;
+        case 2: if (juice.addToTrolley()) { howMany(mykb, myBag, juice, total, itemsInTrolley); } break;
+        case 3: if (beer.addToTrolley()) { howMany(mykb, myBag, beer, total, itemsInTrolley); } break;
+        case 4: if (water.addToTrolley()) { howMany(mykb, myBag, water, total, itemsInTrolley); } break;
+        case 5: break;
     default: System.out.println("Invalid choice.");
 }
 
     }
 
-    /*method to display generic store items and let the user choose which one to buy*/
-    public static void buyStoreItem(Scanner mykb, ShoppingTrolley myBag, double[] total, StoreItem toaster, StoreItem headphones, StoreItem vacuumCleaner) {
+    /*method to display store items and let the user choose which one to buy*/
+    public static void buyStoreItem(Scanner mykb, ShoppingTrolley myBag, double[] total, StoreItem toaster, StoreItem headphones, StoreItem vacuumCleaner, ArrayList<StoreItem> itemsInTrolley) {
         System.out.println("Choose a store item to buy:");
         System.out.println("1. " + toaster);
         System.out.println("2. " + headphones);
@@ -176,23 +189,21 @@ If we created new objects inside each method, they would be different from the o
         try {
             choice = mykb.nextInt();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Returning to main menu.");
+            System.out.println("Invalid. Returning to main menu.");
             mykb.nextLine();
             return;
         }
         switch(choice) {
-            case 1: howMany(mykb, myBag, toaster, total,0); break;
-            case 2: howMany(mykb, myBag, headphones, total,0); break;
-            case 3: howMany(mykb, myBag, vacuumCleaner, total,0); break;
+            case 1: howMany(mykb, myBag, toaster, total, itemsInTrolley); break;
+            case 2: howMany(mykb, myBag, headphones, total, itemsInTrolley); break;
+            case 3: howMany(mykb, myBag, vacuumCleaner, total, itemsInTrolley); break;
             case 4: break;
             default: System.out.println("Invalid choice.");
         }
     }
 
-    /*method to ask how many units to add
-    I created this added parameter because when I was buying drinks the system already added 1, 
-    and then asked how many they wanted, so I can control how many will be purchased with the change min.*/
-  public static void howMany(Scanner mykb, ShoppingTrolley myBag, StoreItem item, double[] total, int added) {
+    /*method to ask how many units to add*/
+public static void howMany(Scanner mykb, ShoppingTrolley myBag, StoreItem item, double[] total, ArrayList<StoreItem> itemsInTrolley) {
     System.out.print("How many do you want to buy? ");
     int quantity = 0;
     try {
@@ -202,15 +213,18 @@ If we created new objects inside each method, they would be different from the o
             return;
         }
     } catch (InputMismatchException e) {
-        System.out.println("Invalid input. Returning to main menu.");
+        System.out.println("Invalid. Returning to main menu.");
         mykb.nextLine();
         return;
     }
-    for (int i = 0; i < quantity - added; i++) {
+    for (int i = 0; i < quantity; i++) {
         myBag.buyItem(item);
+        itemsInTrolley.add(item);
         total[0] += item.getPrice();
     }
+
 }
+
     
 /*method that shows the items without empty it. 
  I used "double[] total" instead of a simple double because Java passes primitive types by value
@@ -218,10 +232,75 @@ this means that if we passed a regular double to a method, any changes made insi
 would not affect the original variable in main. By using an array, Java passes a reference to the original data. 
 This allows all methods to update the same total value through total[0],
 keeping the overall amount accurate throughout the program.*/
-    public static void viewTrolley(ShoppingTrolley trolley, double[] total) {
-        System.out.println("Your Items:");
-        System.out.println(trolley.showItems()); 
-        System.out.printf("Total: €%.2f\n", total[0]); 
-    }
+   public static void trolleyMenu(Scanner mykb, ShoppingTrolley myBag, double[] total, ArrayList<StoreItem> items) {
+    int choice = 0;
+    do {
+        System.out.println("Your trolley contains:");
+        if (items.isEmpty()) {
+            System.out.println("Your trolley is empty.");
+        } else {
+            for (int i = 0; i < items.size(); i++) {
+                System.out.println((i + 1) + ". " + items.get(i));
+            }
+            System.out.printf("Total: €%.2f\n", total[0]);//displays the total value formatted to two decimal places
+            System.out.println(" ");
+        }
+        System.out.println("Choose an option:");
+        System.out.println("1. Remove item");
+        System.out.println("2. Continue shopping");
+        System.out.println("3. Finish purchase");
+
+        try {
+            choice = mykb.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid. Please enter a number.");
+            mykb.nextLine();
+            continue;
+        }
+        switch(choice) {
+            case 1:
+                if (items.isEmpty()) {
+                    System.out.println("Nothing to remove. Your trolley is empty.");
+                } else {
+                    System.out.println("Enter the number of the item to remove:");
+                    int removeIndex = 0;
+                    try {
+                        removeIndex = mykb.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid.");
+                        mykb.nextLine();
+                        break;
+                    }
+                    if (removeIndex < 1 || removeIndex > items.size()) {
+                        System.out.println("Invalid item number.");
+                    } else {
+                       StoreItem removed = items.remove(removeIndex - 1);
+                        total[0] -= removed.getPrice();
+                        System.out.println("Removed " + removed.getName() + " from your trolley.");
+                            myBag.emptyTrolley();
+                            for (StoreItem item : items) {
+                            myBag.buyItem(item);
+                  }
+                    }
+                }
+                break;
+            case 2:
+                System.out.println("Returning to main menu to continue shopping...");
+                choice = 3;
+                break;
+            case 3:
+                System.out.println("Thank you for your purchase!");
+                 System.out.printf("Total: €%.2f\n", total[0]);
+                     System.out.println(" ");
+                displayItemsInTrolley(myBag);
+                System.exit(0);
+                break;
+           
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    } while(choice != 3);
+}
+
 }
  
