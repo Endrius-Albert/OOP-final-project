@@ -303,4 +303,39 @@ keeping the overall amount accurate throughout the program.*/
 }
 
 }
+ /*==================================================
+  Troubleshooting – Why These Additions Were Needed
+  ===================================================
  
+  Since I wasn’t allowed to change the ShoppingTrolley class, I had to find ways to work
+ around to make my code work as expected.
+ 
+ 1. My Own List of Items (itemsInTrolley)
+  ----------------------------------------
+  The ShoppingTrolley stores items, but doesn’t let you remove individual ones or access
+  the list directly. So, I created my own list (itemsInTrolley) to keep track of what’s
+  been added. This way, I can display, remove, or manage items as needed.
+ 
+  2. Adding Items to Both Lists
+  ------------------------------
+  Every time I add an item to the trolley (myBag.buyItem), I also add it to my own list.
+  This keeps both lists in sync so I can manage them properly.
+ 
+  3. Removing Items: Empty and Refill Trick
+ ------------------------------------------
+  Since I can’t remove a specific item from the trolley, I used this trick:
+  I call myBag.emptyTrolley() to clear everything, then loop through my own list
+  and re-add only the items that should stay. That way, the unwanted item is gone.
+ 
+  4. Keeping Track of Total Price
+  --------------------------------
+  The ShoppingTrolley doesn’t track prices or totals. So I created a separate variable
+ (total[0]) to store the running total of item prices. I used an array to allow updating it.
+
+ 5. Showing Items
+ ----------------
+  I can use myBag.showItems() to show everything in the trolley, but when I need more
+  detailed output (like name + price + total), I use my own list instead.
+ 
+  These extra pieces of code were necessary to make the program work correctly
+  without changing the original ShoppingTrolley class. */
