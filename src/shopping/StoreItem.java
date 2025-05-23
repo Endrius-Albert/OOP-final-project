@@ -14,7 +14,7 @@ public class StoreItem {
     
     public StoreItem(String name, double price) {
         this.name = name;
-        this.price = price;
+        this.price = price; 
     }
     
     public String getName() {
