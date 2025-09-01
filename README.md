@@ -1,4 +1,4 @@
-#🛒 Supermarket Shopping System
+# Supermarket Shopping System
 
 ## Description
 
