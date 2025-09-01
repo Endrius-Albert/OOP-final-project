@@ -32,10 +32,7 @@ The project was originally developed as an academic assignment but is structured
 
 ## How to Run
 
-1. Clone this repository:
-
-git clone https://github.com/Endrius-Albert/OOP-final-project.git
-
+1. Clone this repository: git clone https://github.com/Endrius-Albert/OOP-final-project.git
 2. Open the project in a Java IDE (NetBeans, IntelliJ, or Eclipse)  
 3. Compile and run `Supermarket.java`  
 4. Follow the interactive menu in the console to test the system  
